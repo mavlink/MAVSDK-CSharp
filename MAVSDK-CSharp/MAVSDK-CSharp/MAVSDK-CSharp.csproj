@@ -13,5 +13,35 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
+  
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\action\action.proto" Link="proto\action\action.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\calibration\calibration.proto" Link="proto\calibration\calibration.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\camera\camera.proto" Link="proto\camera\camera.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\core\core.proto" Link="proto\core\core.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\gimbal\gimbal.proto" Link="proto\gimbal\gimbal.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\info\info.proto" Link="proto\info\info.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\mission\mission.proto" Link="proto\mission\mission.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\offboard\offboard.proto" Link="proto\offboard\offboard.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\param\param.proto" Link="proto\param\param.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="..\..\proto\protos\telemetry\telemetry.proto" Link="proto\telemetry\telemetry.proto" />
+  </ItemGroup>
 </Project>
