@@ -8,10 +8,14 @@ namespace MAVSDK.CSharp.ConsoleClient
 	{
 		static async Task Main(string[] args)
 		{
-			var channel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
+			var channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
 			var actionServiceClient = new ActionService.ActionServiceClient(channel);
 
-			actionServiceClient.Arm(new ArmRequest(), new CallOptions());
+			var armResponse = await actionServiceClient.ArmAsync(new ArmRequest(), new CallOptions());
+			if (armResponse.ActionResult.Result == ActionResult.Types.Result.Success)
+			{
+				await actionServiceClient.TakeoffAsync(new TakeoffRequest());
+			}
 		}
 	}
 }
