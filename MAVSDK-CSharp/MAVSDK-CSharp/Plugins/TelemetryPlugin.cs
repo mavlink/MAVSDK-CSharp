@@ -16,12 +16,25 @@ namespace MAVSDK_CSharp.Plugins
 			_telemetryClient = new TelemetryService.TelemetryServiceClient(channel);
 		}
 
-
 		public IObservable<Position> Position()
 		{
-			return Observable.Generate(_telemetryClient.SubscribePosition(new SubscribePositionRequest()).ResponseStream, reader => reader.MoveNext().Result, reader => reader,
-				reader => reader.Current.Position);
-			// TODO wrap IAsyncStreamReader in a true async way
+			return Observable.Using(() => _telemetryClient.SubscribePosition(new SubscribePositionRequest()).ResponseStream,
+				reader => Observable.Create(
+					async (IObserver<Position> observer) =>
+					{
+						try
+						{
+							while (await reader.MoveNext())
+							{
+								observer.OnNext(reader.Current.Position);
+							}
+							observer.OnCompleted();
+						}
+						catch (Exception ex)
+						{
+							observer.OnError(ex);
+						}
+					}));
 		}
 	}
 }
