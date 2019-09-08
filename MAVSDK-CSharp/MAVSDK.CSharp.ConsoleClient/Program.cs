@@ -1,20 +1,26 @@
 ﻿using System.Threading.Tasks;
-using Grpc.Core;
-using Mavsdk.Rpc.Action;
 
 namespace MAVSDK.CSharp.ConsoleClient
 {
 	class Program
 	{
+		private const string Host = "127.0.0.1";
+		private const string Port = "50051";
+
 		static async Task Main(string[] args)
 		{
-			var channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
-			var actionServiceClient = new ActionService.ActionServiceClient(channel);
+			var actionPlugin = new ActionPlugin(Host,Port);
 
-			var armResponse = await actionServiceClient.ArmAsync(new ArmRequest(), new CallOptions());
-			if (armResponse.ActionResult.Result == ActionResult.Types.Result.Success)
+
+			try
 			{
-				await actionServiceClient.TakeoffAsync(new TakeoffRequest());
+				await actionPlugin.Arm();
+				await actionPlugin.Takeoff();
+			}
+			catch (System.Exception ex)
+			{
+
+				throw;
 			}
 		}
 	}
