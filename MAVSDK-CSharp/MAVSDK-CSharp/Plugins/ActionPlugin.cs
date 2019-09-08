@@ -39,7 +39,7 @@ namespace MAVSDK_CSharp.Plugins
 		{
 			return Observable.Create<Unit>(observer =>
 			{
-				var landResponse = _actionServiceClient.Land(new LandRequest()); //TODO async
+				var landResponse = _actionServiceClient.Land(new LandRequest());
 				var actionResult = landResponse.ActionResult;
 				if (actionResult.Result == ActionResult.Types.Result.Success)
 				{
@@ -50,7 +50,7 @@ namespace MAVSDK_CSharp.Plugins
 					observer.OnError(new ActionException(actionResult.Result, actionResult.ResultStr));
 				}
 
-				return Task.FromResult(Disposable.Empty);
+				return Disposable.Empty;
 			});
 		}
 	}
