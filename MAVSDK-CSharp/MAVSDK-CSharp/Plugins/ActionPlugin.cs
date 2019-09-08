@@ -11,22 +11,22 @@ namespace MAVSDK_CSharp.Plugins
 {
 	public class ActionPlugin
 	{
-		private readonly ActionService.ActionServiceClient actionServiceClient;
+		private readonly ActionService.ActionServiceClient _actionServiceClient;
 
 		public ActionPlugin(string host, string port)
 		{
 			var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
-			actionServiceClient = new ActionService.ActionServiceClient(channel);
+			_actionServiceClient = new ActionService.ActionServiceClient(channel);
 		}
 
 		public async Task Takeoff()
 		{
-			await actionServiceClient.TakeoffAsync(new TakeoffRequest());
+			await _actionServiceClient.TakeoffAsync(new TakeoffRequest());
 		}
 
 		public async Task Arm()
 		{
-			var armResponse = await actionServiceClient.ArmAsync(new ArmRequest());
+			var armResponse = await _actionServiceClient.ArmAsync(new ArmRequest());
 			var actionResult = armResponse.ActionResult;
 			var result = actionResult.Result == ActionResult.Types.Result.Success;
 			if (result == false)
@@ -39,7 +39,7 @@ namespace MAVSDK_CSharp.Plugins
 		{
 			return Observable.Create<Unit>(observer =>
 			{
-				var landResponse = actionServiceClient.Land(new LandRequest());
+				var landResponse = _actionServiceClient.Land(new LandRequest()); //TODO async
 				var actionResult = landResponse.ActionResult;
 				if (actionResult.Result == ActionResult.Types.Result.Success)
 				{
