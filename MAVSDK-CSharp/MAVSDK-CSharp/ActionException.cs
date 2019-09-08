@@ -1,7 +1,7 @@
 ﻿using System;
 using Mavsdk.Rpc.Action;
 
-namespace MAVSDK.CSharp.ConsoleClient
+namespace MAVSDK_CSharp
 {
 	public class ActionException : Exception
 	{
