@@ -2,7 +2,7 @@
 using Grpc.Core;
 using Mavsdk.Rpc.Action;
 
-namespace MAVSDK.CSharp.ConsoleClient
+namespace MAVSDK_CSharp.Plugins
 {
 	public class ActionPlugin
 	{
