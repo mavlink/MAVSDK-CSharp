@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Action;
 
@@ -28,6 +33,25 @@ namespace MAVSDK_CSharp.Plugins
 			{
 				throw new ActionException(actionResult.Result, actionResult.ResultStr);
 			}
+		}
+
+		public IObservable<Unit> Land()
+		{
+			return Observable.Create<Unit>(observer =>
+			{
+				var landResponse = actionServiceClient.Land(new LandRequest());
+				var actionResult = landResponse.ActionResult;
+				if (actionResult.Result == ActionResult.Types.Result.Success)
+				{
+					observer.OnCompleted();
+				}
+				else
+				{
+					observer.OnError(new ActionException(actionResult.Result, actionResult.ResultStr));
+				}
+
+				return Task.FromResult(Disposable.Empty);
+			});
 		}
 	}
 }

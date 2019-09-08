@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reactive;
+using System.Threading.Tasks;
 using MAVSDK_CSharp.Plugins;
 
 namespace MAVSDK.CSharp.ConsoleClient
@@ -16,6 +17,9 @@ namespace MAVSDK.CSharp.ConsoleClient
 			{
 				await actionPlugin.Arm();
 				await actionPlugin.Takeoff();
+				await Task.Delay(5000);
+
+				actionPlugin.Land().Subscribe(Observer.Create<Unit>(_ => {}, _ => {}));
 			}
 			catch (System.Exception ex)
 			{
