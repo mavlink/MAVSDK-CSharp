@@ -1,31 +1,45 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MAVSDK_CSharp.Plugins;
+using Console = System.Console;
 
 namespace MAVSDK.CSharp.ConsoleClient
 {
-	class Program
-	{
-		private const string Host = "192.168.43.140";
-		private const string Port = "50051";
+    class Program
+    {
+        private const string Host = "localhost";
+        private const string Port = "50051";
 
-		static async Task Main(string[] args)
-		{
-			var actionPlugin = new ActionPlugin(Host,Port);
+        static async Task Main(string[] args)
+        {
+            /*
+             * Print the relative altitude.
+             *
+             * Note:
+             *     - round it to the first decimal
+             *     - emit an event only when the value changes
+             *     - discard the altitudes lower than 0
+             */
+            var telemetryPlugin = new TelemetryPlugin(Host, Port);
+            telemetryPlugin.Position()
+                .Select(position => Math.Round((double) position.RelativeAltitudeM, 1))
+                .DistinctUntilChanged()
+                .Where(altitude => altitude >= 0)
+                .Subscribe(Observer.Create<double>(altitude => Console.WriteLine($"altitude: {altitude}"), _ => { }));
 
-			try
-			{
-				await actionPlugin.Arm();
-				await actionPlugin.Takeoff();
-				await Task.Delay(5000);
+            // Arm, takeoff, wait 5 seconds and land.
+            var actionPlugin = new ActionPlugin(Host, Port);
+            var tcs = new TaskCompletionSource<bool>();
+            actionPlugin.Arm()
+                .Concat(actionPlugin.Takeoff())
+                .Delay(TimeSpan.FromSeconds(5))
+                .Concat(actionPlugin.Land())
+                .Subscribe(Observer.Create<Unit>(_ => { }, () => tcs.SetResult(true)));
 
-				actionPlugin.Land().Subscribe(Observer.Create<Unit>(_ => {}, _ => {}));
-			}
-			catch (System.Exception ex)
-			{
-
-				throw;
-			}
-		}
-	}
+            // Wait until the takeoff routine completes (which happens when the landing starts)
+            await tcs.Task;
+        }
+    }
 }
