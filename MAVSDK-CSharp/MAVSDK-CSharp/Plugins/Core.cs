@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Core;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Core
@@ -43,6 +45,16 @@ namespace MAVSDK_CSharp.Plugins
                     }));
         }
 
+        public IObservable<List<PluginInfo>> ListRunningPlugins()
+        {
+            return Observable.Create<List<PluginInfo>>(observer =>
+            {
+                var listRunningPluginsResponse = _coreServiceClient.ListRunningPlugins(new ListRunningPluginsRequest());
+                observer.OnNext(listRunningPluginsResponse.PluginInfo.ToList());
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
     }
 }

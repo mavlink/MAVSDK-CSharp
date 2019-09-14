@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Telemetry;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Telemetry
@@ -64,11 +66,11 @@ namespace MAVSDK_CSharp.Plugins
                     }));
         }
 
-        public IObservable<Boolean> InAir()
+        public IObservable<bool> InAir()
         {
             return Observable.Using(() => _telemetryServiceClient.SubscribeInAir(new SubscribeInAirRequest()).ResponseStream,
                 reader => Observable.Create(
-                    async (IObserver<Boolean> observer) =>
+                    async (IObserver<bool> observer) =>
                     {
                         try
                         {
@@ -85,11 +87,11 @@ namespace MAVSDK_CSharp.Plugins
                     }));
         }
 
-        public IObservable<Boolean> Armed()
+        public IObservable<bool> Armed()
         {
             return Observable.Using(() => _telemetryServiceClient.SubscribeArmed(new SubscribeArmedRequest()).ResponseStream,
                 reader => Observable.Create(
-                    async (IObserver<Boolean> observer) =>
+                    async (IObserver<bool> observer) =>
                     {
                         try
                         {

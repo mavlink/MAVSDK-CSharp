@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Param;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Param
@@ -32,7 +34,25 @@ namespace MAVSDK_CSharp.Plugins
             }
         }
 
+        public IObservable<int> GetIntParam()
+        {
+            return Observable.Create<int>(observer =>
+            {
+                var getIntParamResponse = _paramServiceClient.GetIntParam(new GetIntParamRequest());
+                var paramResult = getIntParamResponse.ParamResult;
+                if (paramResult.Result == ParamResult.Types.Result.Success)
+                {
+                    observer.OnNext(getIntParamResponse.Value);
+                }
+                else
+                {
+                    observer.OnError(new ParamException(paramResult.Result, paramResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetIntParam()
         {
@@ -53,7 +73,25 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<float> GetFloatParam()
+        {
+            return Observable.Create<float>(observer =>
+            {
+                var getFloatParamResponse = _paramServiceClient.GetFloatParam(new GetFloatParamRequest());
+                var paramResult = getFloatParamResponse.ParamResult;
+                if (paramResult.Result == ParamResult.Types.Result.Success)
+                {
+                    observer.OnNext(getFloatParamResponse.Value);
+                }
+                else
+                {
+                    observer.OnError(new ParamException(paramResult.Result, paramResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetFloatParam()
         {

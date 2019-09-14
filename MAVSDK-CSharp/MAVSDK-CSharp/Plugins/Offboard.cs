@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Offboard;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Offboard
@@ -70,7 +72,17 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<bool> IsActive()
+        {
+            return Observable.Create<bool>(observer =>
+            {
+                var isActiveResponse = _offboardServiceClient.IsActive(new IsActiveRequest());
+                observer.OnNext(isActiveResponse.IsActive);
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetAttitude()
         {
