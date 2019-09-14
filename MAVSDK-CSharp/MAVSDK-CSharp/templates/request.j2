@@ -1,1 +1,32 @@
+public IObservable<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}> {{ name.upper_camel_case }}()
+{
+    return Observable.Create<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}>(observer =>
+    {
+        var {{ name.lower_camel_case }}Response = _{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(new {{ name.upper_camel_case }}Request());
 
+        {%- if has_result %}
+        var {{ plugin_name.lower_camel_case }}Result = {{ name.lower_camel_case }}Response.{{ plugin_name.upper_camel_case }}Result;
+        if ({{ plugin_name.lower_camel_case }}Result.Result == {{ plugin_name.upper_camel_case }}Result.Types.Result.Success)
+        {
+            {%- if return_type.is_repeated %}
+            observer.OnNext({{ name.lower_camel_case }}Response.{{ return_name.upper_camel_case }}.ToList());
+            {%- else %}
+            observer.OnNext({{ name.lower_camel_case }}Response.{{ return_name.upper_camel_case }});
+            {%- endif %}
+        }
+        else
+        {
+            observer.OnError(new {{ plugin_name.upper_camel_case }}Exception({{ plugin_name.lower_camel_case }}Result.Result, {{ plugin_name.lower_camel_case }}Result.ResultStr));
+        }
+        {%- else %}
+            {%- if return_type.is_repeated %}
+        observer.OnNext({{ name.lower_camel_case }}Response.{{ return_name.upper_camel_case }}.ToList());
+            {%- else %}
+        observer.OnNext({{ name.lower_camel_case }}Response.{{ return_name.upper_camel_case }});
+            {%- endif %}
+        {%- endif %}
+
+        observer.OnCompleted();
+        return Task.FromResult(Disposable.Empty);
+    });
+}
