@@ -29,9 +29,14 @@ namespace MAVSDK.CSharp.ConsoleClient
                 .DistinctUntilChanged()
                 .Where(altitude => altitude >= 0)
                 .Subscribe(Observer.Create<double>(altitude => Console.WriteLine($"altitude: {altitude}"), _ => { }));
-
-            // Arm, takeoff, wait 5 seconds and land.
+            
+            // Print the takeoff altitude.
             var action = new Action(Host, Port);
+            action.GetTakeoffAltitude()
+                .Do(altitude => Console.WriteLine($"Takeoff altitude: {altitude}"))
+                .Subscribe();
+            
+            // Arm, takeoff, wait 5 seconds and land.
             var tcs = new TaskCompletionSource<bool>();
             action.Arm()
                 .Concat(action.Takeoff())
