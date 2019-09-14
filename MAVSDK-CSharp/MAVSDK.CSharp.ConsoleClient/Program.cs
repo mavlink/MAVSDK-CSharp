@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using MAVSDK_CSharp.Plugins;
 using Action = MAVSDK_CSharp.Plugins.Action;
 using Console = System.Console;
 
@@ -12,7 +13,7 @@ namespace MAVSDK.CSharp.ConsoleClient
         private const string Host = "localhost";
         private const string Port = "50051";
 
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             /*
              * Print the relative altitude.
@@ -22,14 +23,12 @@ namespace MAVSDK.CSharp.ConsoleClient
              *     - emit an event only when the value changes
              *     - discard the altitudes lower than 0
              */
-            /*
-            var telemetryPlugin = new TelemetryPlugin(Host, Port);
-            telemetryPlugin.Position()
-                .Select(position => Math.Round((double) position.RelativeAltitudeM, 1))
+            var telemetry = new Telemetry(Host, Port);
+            telemetry.Position()
+                .Select(position => Math.Round(position.RelativeAltitudeM, 1))
                 .DistinctUntilChanged()
                 .Where(altitude => altitude >= 0)
                 .Subscribe(Observer.Create<double>(altitude => Console.WriteLine($"altitude: {altitude}"), _ => { }));
-                */
 
             // Arm, takeoff, wait 5 seconds and land.
             var action = new Action(Host, Port);
