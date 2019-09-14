@@ -1,1 +1,43 @@
-
+public IObservable<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}> {{ name.upper_camel_case }}()
+{
+    return Observable.Using(() => _{{ plugin_name.lower_camel_case }}ServiceClient.Subscribe{{ name.upper_camel_case }}(new Subscribe{{ name.upper_camel_case }}Request()).ResponseStream,
+        reader => Observable.Create(
+            async (IObserver<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}> observer) =>
+            {
+                try
+                {
+                    while (await reader.MoveNext())
+                    {
+                        {%- if has_result %}
+                        var result = reader.Current.{{ plugin_name.upper_camel_case }}Result;
+                        switch (result.Result)
+                        {
+                            case {{ plugin_name.upper_camel_case }}Result.Types.Result.Success:
+                            case {{ plugin_name.upper_camel_case }}Result.Types.Result.InProgress:
+                            case {{ plugin_name.upper_camel_case }}Result.Types.Result.Instruction:
+                                {%- if return_type.is_repeated %}
+                                observer.OnNext(reader.Current.{{ return_name.upper_camel_case }}.ToList());
+                                {%- else %}
+                                observer.OnNext(reader.Current.{{ return_name.upper_camel_case }});
+                                {%- endif %}
+                                break;
+                            default:
+                                observer.OnError(new {{ plugin_name.upper_camel_case }}Exception(result.Result, result.ResultStr));
+                                break;
+                        }
+                        {%- else %}
+                            {%- if return_type.is_repeated %}
+                        observer.OnNext(reader.Current.{{ return_name.upper_camel_case }}.ToList());
+                            {%- else %}
+                        observer.OnNext(reader.Current.{{ return_name.upper_camel_case }});
+                            {%- endif %}
+                        {%- endif %}
+                    }
+                    observer.OnCompleted();
+                }
+                catch (Exception ex)
+                {
+                    observer.OnError(ex);
+                }
+            }));
+}
