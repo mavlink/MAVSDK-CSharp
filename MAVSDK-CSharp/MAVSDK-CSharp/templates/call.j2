@@ -1,0 +1,23 @@
+public IObservable<Unit> {{ name.upper_camel_case }}()
+{
+    return Observable.Create<Unit>(observer =>
+    {
+        {% if has_result %}var {{ name.lower_camel_case }}Response = {% endif %}_{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(new {{ name.upper_camel_case }}Request());
+
+        {%- if has_result %}
+        var {{ plugin_name.lower_camel_case }}Result = {{ name.lower_camel_case }}Response.{{ plugin_name.upper_camel_case }}Result;
+        if ({{ plugin_name.lower_camel_case }}Result.Result == {{ plugin_name.upper_camel_case }}Result.Types.Result.Success)
+        {
+            observer.OnCompleted();
+        }
+        else
+        {
+            observer.OnError(new {{ plugin_name.upper_camel_case }}Exception({{ plugin_name.lower_camel_case }}Result.Result, {{ plugin_name.lower_camel_case }}Result.ResultStr));
+        }
+        {%- else %}
+        observer.OnCompleted();
+        {%- endif %}
+
+        return Task.FromResult(Disposable.Empty);
+    });
+}

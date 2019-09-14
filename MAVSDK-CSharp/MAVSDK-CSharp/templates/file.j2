@@ -1,0 +1,41 @@
+using System;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading.Tasks;
+using Grpc.Core;
+using Mavsdk.Rpc.{{ plugin_name.upper_camel_case }};
+
+namespace MAVSDK_CSharp.Plugins
+{
+    public class {{ plugin_name.upper_camel_case }}
+    {
+        private readonly {{ plugin_name.upper_camel_case }}Service.{{ plugin_name.upper_camel_case }}ServiceClient _{{ plugin_name.lower_camel_case }}ServiceClient;
+
+        public {{ plugin_name.upper_camel_case }}(string host, string port)
+        {
+            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
+            _{{ plugin_name.lower_camel_case }}ServiceClient = new {{ plugin_name.upper_camel_case }}Service.{{ plugin_name.upper_camel_case }}ServiceClient(channel);
+        }
+
+        {% if has_result -%}
+        public class {{ plugin_name.upper_camel_case }}Exception : Exception
+        {
+            public {{ plugin_name.upper_camel_case }}Result.Types.Result Result { get; }
+            public string ResultStr { get; }
+
+            public {{ plugin_name.upper_camel_case }}Exception({{ plugin_name.upper_camel_case }}Result.Types.Result result, string resultStr)
+            {
+                Result = result;
+                ResultStr = resultStr;
+            }
+        }
+        {%- endif %}
+
+{%- for method in methods %}
+
+{{ indent(method, 2) }}
+{%- endfor %}
+    }
+}
