@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Camera;
@@ -183,17 +184,131 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<CameraMode> Mode()
+        {
+            return Observable.Using(() => _cameraServiceClient.SubscribeMode(new SubscribeModeRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<CameraMode> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.CameraMode);
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
+        public IObservable<VideoStreamInfo> VideoStreamInfo()
+        {
+            return Observable.Using(() => _cameraServiceClient.SubscribeVideoStreamInfo(new SubscribeVideoStreamInfoRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<VideoStreamInfo> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.VideoStreamInfo);
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
+        public IObservable<CaptureInfo> CaptureInfo()
+        {
+            return Observable.Using(() => _cameraServiceClient.SubscribeCaptureInfo(new SubscribeCaptureInfoRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<CaptureInfo> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.CaptureInfo);
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
+        public IObservable<CameraStatus> CameraStatus()
+        {
+            return Observable.Using(() => _cameraServiceClient.SubscribeCameraStatus(new SubscribeCameraStatusRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<CameraStatus> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.CameraStatus);
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
+        public IObservable<List<Setting>> CurrentSettings()
+        {
+            return Observable.Using(() => _cameraServiceClient.SubscribeCurrentSettings(new SubscribeCurrentSettingsRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<List<Setting>> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.CurrentSettings.ToList());
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
-
-
-
-
-
-
+        public IObservable<List<SettingOptions>> PossibleSettingOptions()
+        {
+            return Observable.Using(() => _cameraServiceClient.SubscribePossibleSettingOptions(new SubscribePossibleSettingOptionsRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<List<SettingOptions>> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.SettingOptions.ToList());
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
         public IObservable<Unit> SetSetting()
         {

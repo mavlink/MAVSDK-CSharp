@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Core;
@@ -21,7 +22,26 @@ namespace MAVSDK_CSharp.Plugins
 
         
 
-
+        public IObservable<ConnectionState> ConnectionState()
+        {
+            return Observable.Using(() => _coreServiceClient.SubscribeConnectionState(new SubscribeConnectionStateRequest()).ResponseStream,
+                reader => Observable.Create(
+                    async (IObserver<ConnectionState> observer) =>
+                    {
+                        try
+                        {
+                            while (await reader.MoveNext())
+                            {
+                                observer.OnNext(reader.Current.ConnectionState);
+                            }
+                            observer.OnCompleted();
+                        }
+                        catch (Exception ex)
+                        {
+                            observer.OnError(ex);
+                        }
+                    }));
+        }
 
 
     }
