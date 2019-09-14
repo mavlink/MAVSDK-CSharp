@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Action;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Action
@@ -203,7 +205,25 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<float> GetTakeoffAltitude()
+        {
+            return Observable.Create<float>(observer =>
+            {
+                var getTakeoffAltitudeResponse = _actionServiceClient.GetTakeoffAltitude(new GetTakeoffAltitudeRequest());
+                var actionResult = getTakeoffAltitudeResponse.ActionResult;
+                if (actionResult.Result == ActionResult.Types.Result.Success)
+                {
+                    observer.OnNext(getTakeoffAltitudeResponse.Altitude);
+                }
+                else
+                {
+                    observer.OnError(new ActionException(actionResult.Result, actionResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetTakeoffAltitude()
         {
@@ -224,7 +244,25 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<float> GetMaximumSpeed()
+        {
+            return Observable.Create<float>(observer =>
+            {
+                var getMaximumSpeedResponse = _actionServiceClient.GetMaximumSpeed(new GetMaximumSpeedRequest());
+                var actionResult = getMaximumSpeedResponse.ActionResult;
+                if (actionResult.Result == ActionResult.Types.Result.Success)
+                {
+                    observer.OnNext(getMaximumSpeedResponse.Speed);
+                }
+                else
+                {
+                    observer.OnError(new ActionException(actionResult.Result, actionResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetMaximumSpeed()
         {
@@ -245,7 +283,25 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<float> GetReturnToLaunchAltitude()
+        {
+            return Observable.Create<float>(observer =>
+            {
+                var getReturnToLaunchAltitudeResponse = _actionServiceClient.GetReturnToLaunchAltitude(new GetReturnToLaunchAltitudeRequest());
+                var actionResult = getReturnToLaunchAltitudeResponse.ActionResult;
+                if (actionResult.Result == ActionResult.Types.Result.Success)
+                {
+                    observer.OnNext(getReturnToLaunchAltitudeResponse.RelativeAltitudeM);
+                }
+                else
+                {
+                    observer.OnError(new ActionException(actionResult.Result, actionResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetReturnToLaunchAltitude()
         {

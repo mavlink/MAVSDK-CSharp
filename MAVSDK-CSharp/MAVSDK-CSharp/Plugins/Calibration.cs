@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Calibration;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Calibration

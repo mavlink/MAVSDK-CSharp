@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Mission;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Mission
@@ -62,7 +64,25 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<List<MissionItem>> DownloadMission()
+        {
+            return Observable.Create<List<MissionItem>>(observer =>
+            {
+                var downloadMissionResponse = _missionServiceClient.DownloadMission(new DownloadMissionRequest());
+                var missionResult = downloadMissionResponse.MissionResult;
+                if (missionResult.Result == MissionResult.Types.Result.Success)
+                {
+                    observer.OnNext(downloadMissionResponse.MissionItems.ToList());
+                }
+                else
+                {
+                    observer.OnError(new MissionException(missionResult.Result, missionResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> CancelMissionDownload()
         {
@@ -132,7 +152,17 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
 
+        public IObservable<bool> IsMissionFinished()
+        {
+            return Observable.Create<bool>(observer =>
+            {
+                var isMissionFinishedResponse = _missionServiceClient.IsMissionFinished(new IsMissionFinishedRequest());
+                observer.OnNext(isMissionFinishedResponse.IsFinished);
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<MissionProgress> MissionProgress()
         {
@@ -155,7 +185,17 @@ namespace MAVSDK_CSharp.Plugins
                     }));
         }
 
+        public IObservable<bool> GetReturnToLaunchAfterMission()
+        {
+            return Observable.Create<bool>(observer =>
+            {
+                var getReturnToLaunchAfterMissionResponse = _missionServiceClient.GetReturnToLaunchAfterMission(new GetReturnToLaunchAfterMissionRequest());
+                observer.OnNext(getReturnToLaunchAfterMissionResponse.Enable);
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
 
         public IObservable<Unit> SetReturnToLaunchAfterMission()
         {

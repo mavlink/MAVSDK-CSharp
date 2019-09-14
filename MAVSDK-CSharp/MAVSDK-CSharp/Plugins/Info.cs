@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Mavsdk.Rpc.Info;
 
+using Version = Mavsdk.Rpc.Info.Version;
+
 namespace MAVSDK_CSharp.Plugins
 {
     public class Info
@@ -32,6 +34,24 @@ namespace MAVSDK_CSharp.Plugins
             }
         }
 
+        public IObservable<Version> GetVersion()
+        {
+            return Observable.Create<Version>(observer =>
+            {
+                var getVersionResponse = _infoServiceClient.GetVersion(new GetVersionRequest());
+                var infoResult = getVersionResponse.InfoResult;
+                if (infoResult.Result == InfoResult.Types.Result.Success)
+                {
+                    observer.OnNext(getVersionResponse.Version);
+                }
+                else
+                {
+                    observer.OnError(new InfoException(infoResult.Result, infoResult.ResultStr));
+                }
 
+                observer.OnCompleted();
+                return Task.FromResult(Disposable.Empty);
+            });
+        }
     }
 }
