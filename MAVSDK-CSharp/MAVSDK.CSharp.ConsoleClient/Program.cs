@@ -2,7 +2,7 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using MAVSDK_CSharp.Plugins;
+using Action = MAVSDK_CSharp.Plugins.Action;
 using Console = System.Console;
 
 namespace MAVSDK.CSharp.ConsoleClient
@@ -22,20 +22,22 @@ namespace MAVSDK.CSharp.ConsoleClient
              *     - emit an event only when the value changes
              *     - discard the altitudes lower than 0
              */
+            /*
             var telemetryPlugin = new TelemetryPlugin(Host, Port);
             telemetryPlugin.Position()
                 .Select(position => Math.Round((double) position.RelativeAltitudeM, 1))
                 .DistinctUntilChanged()
                 .Where(altitude => altitude >= 0)
                 .Subscribe(Observer.Create<double>(altitude => Console.WriteLine($"altitude: {altitude}"), _ => { }));
+                */
 
             // Arm, takeoff, wait 5 seconds and land.
-            var actionPlugin = new ActionPlugin(Host, Port);
+            var action = new Action(Host, Port);
             var tcs = new TaskCompletionSource<bool>();
-            actionPlugin.Arm()
-                .Concat(actionPlugin.Takeoff())
+            action.Arm()
+                .Concat(action.Takeoff())
                 .Delay(TimeSpan.FromSeconds(5))
-                .Concat(actionPlugin.Land())
+                .Concat(action.Land())
                 .Subscribe(Observer.Create<Unit>(_ => { }, () => tcs.SetResult(true)));
 
             // Wait until the takeoff routine completes (which happens when the landing starts)
