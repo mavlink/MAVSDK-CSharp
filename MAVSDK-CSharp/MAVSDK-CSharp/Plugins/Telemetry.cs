@@ -16,13 +16,10 @@ namespace MAVSDK_CSharp.Plugins
     {
         private readonly TelemetryService.TelemetryServiceClient _telemetryServiceClient;
 
-        public Telemetry(string host, string port)
+        internal Telemetry(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _telemetryServiceClient = new TelemetryService.TelemetryServiceClient(channel);
         }
-
-        
 
         public IObservable<Position> Position()
         {
