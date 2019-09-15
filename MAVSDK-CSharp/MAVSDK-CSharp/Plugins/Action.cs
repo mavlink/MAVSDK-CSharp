@@ -16,9 +16,8 @@ namespace MAVSDK_CSharp.Plugins
     {
         private readonly ActionService.ActionServiceClient _actionServiceClient;
 
-        public Action(string host, string port)
+        public Action(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _actionServiceClient = new ActionService.ActionServiceClient(channel);
         }
 
