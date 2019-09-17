@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MAVSDK-CSharp\MAVSDK-CSharp.csproj" />
+    <ProjectReference Include="..\MAVSDK\MAVSDK.csproj" />
   </ItemGroup>
 
 </Project>
