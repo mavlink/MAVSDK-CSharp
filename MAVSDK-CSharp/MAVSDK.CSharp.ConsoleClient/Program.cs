@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
-using MAVSDK_CSharp;
+using MAVSDK;
 
 namespace MAVSDK.CSharp.ConsoleClient
 {
