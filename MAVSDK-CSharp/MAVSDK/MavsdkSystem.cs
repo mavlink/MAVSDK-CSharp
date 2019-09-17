@@ -23,8 +23,17 @@ namespace MAVSDK
         public MavsdkSystem(string host, int port)
         {
             _channel = new Channel(host, port, ChannelCredentials.Insecure);
-            Telemetry = new Telemetry(_channel);
+
             Action = new Action(_channel);
+            Calibration = new Calibration(_channel);
+            Camera = new Camera(_channel);
+            Core = new Core(_channel);
+            Gimbal = new Gimbal(_channel);
+            Info = new Info(_channel);
+            Mission = new Mission(_channel);
+            Offboard = new Offboard(_channel);
+            Param = new Param(_channel);
+            Telemetry = new Telemetry(_channel);
         }
 
         private void ReleaseUnmanagedResources()
