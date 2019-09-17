@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAVSDK-CSharp", "MAVSDK-CSharp\MAVSDK-CSharp.csproj", "{2CE4FA33-5FE3-4E43-AEA9-6D60C1B916D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAVSDK", "MAVSDK\MAVSDK.csproj", "{2CE4FA33-5FE3-4E43-AEA9-6D60C1B916D0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAVSDK.CSharp.ConsoleClient", "MAVSDK.CSharp.ConsoleClient\MAVSDK.CSharp.ConsoleClient.csproj", "{3499D490-65B1-4EE2-98D5-D91A44F77D70}"
 EndProject

@@ -3,7 +3,7 @@ using Grpc.Core;
 using MAVSDK_CSharp.Plugins;
 using Action = MAVSDK_CSharp.Plugins.Action;
 
-namespace MAVSDK_CSharp
+namespace MAVSDK
 {
     public class MavSystem: IDisposable
     {
