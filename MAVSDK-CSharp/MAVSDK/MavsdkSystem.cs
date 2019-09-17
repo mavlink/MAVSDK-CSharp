@@ -5,7 +5,7 @@ using Action = MAVSDK.Plugins.Action;
 
 namespace MAVSDK
 {
-    public class MavSystem: IDisposable
+    public class MavsdkSystem: IDisposable
     {
         private readonly Channel _channel;
 
@@ -20,7 +20,7 @@ namespace MAVSDK
         public Param Param { get; }
         public Telemetry Telemetry { get; }
 
-        public MavSystem(string host, int port)
+        public MavsdkSystem(string host, int port)
         {
             _channel = new Channel(host, port, ChannelCredentials.Insecure);
             Telemetry = new Telemetry(_channel);
@@ -45,7 +45,7 @@ namespace MAVSDK
             GC.SuppressFinalize(this);
         }
 
-        ~MavSystem()
+        ~MavsdkSystem()
         {
             ReleaseUnmanagedResources();
         }

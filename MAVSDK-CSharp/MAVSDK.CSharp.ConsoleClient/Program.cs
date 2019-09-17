@@ -22,7 +22,7 @@ namespace MAVSDK.CSharp.ConsoleClient
              *     - emit an event only when the value changes
              *     - discard the altitudes lower than 0
              */
-            var drone = new MavSystem(Host, Port);
+            var drone = new MavsdkSystem(Host, Port);
             drone.Telemetry.Position()
                 .Select(position => Math.Round(position.RelativeAltitudeM, 1))
                 .DistinctUntilChanged()
