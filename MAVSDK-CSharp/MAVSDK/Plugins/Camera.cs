@@ -10,28 +10,15 @@ using Mavsdk.Rpc.Camera;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Camera
     {
         private readonly CameraService.CameraServiceClient _cameraServiceClient;
 
-        public Camera(string host, string port)
+        internal Camera(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _cameraServiceClient = new CameraService.CameraServiceClient(channel);
-        }
-
-        public class CameraException : Exception
-        {
-            public CameraResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public CameraException(CameraResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<Unit> TakePhoto()
@@ -329,6 +316,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class CameraException : Exception
+    {
+        public CameraResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public CameraException(CameraResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }

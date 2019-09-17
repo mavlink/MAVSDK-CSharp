@@ -10,27 +10,15 @@ using Mavsdk.Rpc.Action;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Action
     {
         private readonly ActionService.ActionServiceClient _actionServiceClient;
 
-        public Action(Channel channel)
+        internal Action(Channel channel)
         {
             _actionServiceClient = new ActionService.ActionServiceClient(channel);
-        }
-
-        public class ActionException : Exception
-        {
-            public ActionResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public ActionException(ActionResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<Unit> Arm()
@@ -319,6 +307,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class ActionException : Exception
+    {
+        public ActionResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public ActionException(ActionResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }

@@ -10,28 +10,15 @@ using Mavsdk.Rpc.Offboard;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Offboard
     {
         private readonly OffboardService.OffboardServiceClient _offboardServiceClient;
 
-        public Offboard(string host, string port)
+        internal Offboard(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _offboardServiceClient = new OffboardService.OffboardServiceClient(channel);
-        }
-
-        public class OffboardException : Exception
-        {
-            public OffboardResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public OffboardException(OffboardResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<Unit> Start()
@@ -148,6 +135,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class OffboardException : Exception
+    {
+        public OffboardResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public OffboardException(OffboardResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }

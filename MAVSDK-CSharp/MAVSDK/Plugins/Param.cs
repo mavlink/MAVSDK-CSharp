@@ -10,28 +10,15 @@ using Mavsdk.Rpc.Param;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Param
     {
         private readonly ParamService.ParamServiceClient _paramServiceClient;
 
-        public Param(string host, string port)
+        internal Param(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _paramServiceClient = new ParamService.ParamServiceClient(channel);
-        }
-
-        public class ParamException : Exception
-        {
-            public ParamResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public ParamException(ParamResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<int> GetIntParam()
@@ -110,6 +97,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class ParamException : Exception
+    {
+        public ParamResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public ParamException(ParamResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }

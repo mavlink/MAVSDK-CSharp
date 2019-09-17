@@ -10,7 +10,7 @@ using Mavsdk.Rpc.Telemetry;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Telemetry
     {
@@ -336,4 +336,6 @@ namespace MAVSDK_CSharp.Plugins
                     }));
         }
     }
+
+    
 }

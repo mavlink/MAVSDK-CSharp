@@ -10,28 +10,15 @@ using Mavsdk.Rpc.Gimbal;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Gimbal
     {
         private readonly GimbalService.GimbalServiceClient _gimbalServiceClient;
 
-        public Gimbal(string host, string port)
+        internal Gimbal(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _gimbalServiceClient = new GimbalService.GimbalServiceClient(channel);
-        }
-
-        public class GimbalException : Exception
-        {
-            public GimbalResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public GimbalException(GimbalResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<Unit> SetPitchAndYaw()
@@ -51,6 +38,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class GimbalException : Exception
+    {
+        public GimbalResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public GimbalException(GimbalResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }
