@@ -21,23 +21,23 @@ namespace MAVSDK.Plugins
             _{{ plugin_name.lower_camel_case }}ServiceClient = new {{ plugin_name.upper_camel_case }}Service.{{ plugin_name.upper_camel_case }}ServiceClient(channel);
         }
 
-        {% if has_result -%}
-        public class {{ plugin_name.upper_camel_case }}Exception : Exception
-        {
-            public {{ plugin_name.upper_camel_case }}Result.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public {{ plugin_name.upper_camel_case }}Exception({{ plugin_name.upper_camel_case }}Result.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
-        }
-        {%- endif %}
-
 {%- for method in methods %}
 
 {{ indent(method, 2) }}
 {%- endfor %}
     }
+
+    {% if has_result -%}
+    public class {{ plugin_name.upper_camel_case }}Exception : Exception
+    {
+        public {{ plugin_name.upper_camel_case }}Result.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public {{ plugin_name.upper_camel_case }}Exception({{ plugin_name.upper_camel_case }}Result.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
+        }
+    }
+    {%- endif %}
 }
