@@ -10,28 +10,15 @@ using Mavsdk.Rpc.Mission;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Mission
     {
         private readonly MissionService.MissionServiceClient _missionServiceClient;
 
-        public Mission(string host, string port)
+        internal Mission(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _missionServiceClient = new MissionService.MissionServiceClient(channel);
-        }
-
-        public class MissionException : Exception
-        {
-            public MissionResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public MissionException(MissionResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<Unit> UploadMission()
@@ -206,6 +193,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class MissionException : Exception
+    {
+        public MissionResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public MissionException(MissionResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }

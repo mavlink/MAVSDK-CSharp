@@ -10,28 +10,15 @@ using Mavsdk.Rpc.Calibration;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Calibration
     {
         private readonly CalibrationService.CalibrationServiceClient _calibrationServiceClient;
 
-        public Calibration(string host, string port)
+        internal Calibration(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _calibrationServiceClient = new CalibrationService.CalibrationServiceClient(channel);
-        }
-
-        public class CalibrationException : Exception
-        {
-            public CalibrationResult.Types.Result Result { get; }
-            public string ResultStr { get; }
-
-            public CalibrationException(CalibrationResult.Types.Result result, string resultStr)
-            {
-                Result = result;
-                ResultStr = resultStr;
-            }
         }
 
         public IObservable<ProgressData> CalibrateGyro()
@@ -171,6 +158,18 @@ namespace MAVSDK_CSharp.Plugins
 
                 return Task.FromResult(Disposable.Empty);
             });
+        }
+    }
+
+    public class CalibrationException : Exception
+    {
+        public CalibrationResult.Types.Result Result { get; }
+        public string ResultStr { get; }
+
+        public CalibrationException(CalibrationResult.Types.Result result, string resultStr)
+        {
+            Result = result;
+            ResultStr = resultStr;
         }
     }
 }

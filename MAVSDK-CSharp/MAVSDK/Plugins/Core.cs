@@ -10,19 +10,16 @@ using Mavsdk.Rpc.Core;
 
 using Version = Mavsdk.Rpc.Info.Version;
 
-namespace MAVSDK_CSharp.Plugins
+namespace MAVSDK.Plugins
 {
     public class Core
     {
         private readonly CoreService.CoreServiceClient _coreServiceClient;
 
-        public Core(string host, string port)
+        internal Core(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _coreServiceClient = new CoreService.CoreServiceClient(channel);
         }
-
-        
 
         public IObservable<ConnectionState> ConnectionState()
         {
@@ -57,4 +54,6 @@ namespace MAVSDK_CSharp.Plugins
             });
         }
     }
+
+    
 }
