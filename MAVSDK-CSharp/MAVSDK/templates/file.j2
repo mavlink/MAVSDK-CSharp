@@ -16,9 +16,8 @@ namespace MAVSDK.Plugins
     {
         private readonly {{ plugin_name.upper_camel_case }}Service.{{ plugin_name.upper_camel_case }}ServiceClient _{{ plugin_name.lower_camel_case }}ServiceClient;
 
-        public {{ plugin_name.upper_camel_case }}(string host, string port)
+        internal {{ plugin_name.upper_camel_case }}(Channel channel)
         {
-            var channel = new Channel($"{host}:{port}", ChannelCredentials.Insecure);
             _{{ plugin_name.lower_camel_case }}ServiceClient = new {{ plugin_name.upper_camel_case }}Service.{{ plugin_name.upper_camel_case }}ServiceClient(channel);
         }
 
