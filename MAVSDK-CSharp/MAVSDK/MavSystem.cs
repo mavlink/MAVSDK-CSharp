@@ -1,7 +1,7 @@
 ﻿using System;
 using Grpc.Core;
-using MAVSDK_CSharp.Plugins;
-using Action = MAVSDK_CSharp.Plugins.Action;
+using MAVSDK.Plugins;
+using Action = MAVSDK.Plugins.Action;
 
 namespace MAVSDK
 {
