@@ -10,6 +10,14 @@ namespace MAVSDK_CSharp
         private readonly Channel _channel;
 
         public Action Action { get; }
+        public Calibration Calibration { get; }
+        public Camera Camera { get; }
+        public Core Core { get; }
+        public Gimbal Gimbal { get; }
+        public Info Info { get; }
+        public Mission Mission { get; }
+        public Offboard Offboard { get; }
+        public Param Param { get; }
         public Telemetry Telemetry { get; }
 
         public MavSystem(string host, int port)
