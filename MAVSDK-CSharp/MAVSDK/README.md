@@ -13,7 +13,7 @@ Most of the code is auto-generated from the proto files, versioned and kept in _
 The first time, you therefore need to install the module in a python venv. Note that you need Python 3. First go into `../../proto/pb_plugins` and create a venv:
 
 ```sh
-cd ../../proto/pb_plugins
+pushd ../../proto/pb_plugins
 python -m venv venv
 ```
 
@@ -21,6 +21,10 @@ Then activate the venv:
 
 ```sh
 source ./venv/bin/activate
+```
+or on Windows:
+```ps
+.\venv\Scripts\activate.ps1
 ```
 
 You can now install `protoc-gen-dcsdk`, as follows:
@@ -30,10 +34,11 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-After that, running `$ which protoc-gen-dcsdk` should show you the path to `protoc-gen-dcsdk`.
+After that, running `$ which protoc-gen-dcsdk` (`PS> (gcm  protoc-gen-dcsdk).Path`) should show you the path to `protoc-gen-dcsdk`.
 
 We can now generate the code from the proto files:
 
 ```sh
+popd
 dotnet build -target:genMAVSDK
 ```
