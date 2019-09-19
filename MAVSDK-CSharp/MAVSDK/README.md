@@ -42,3 +42,8 @@ We can now generate the code from the proto files:
 popd
 dotnet build -target:genMAVSDK
 ```
+or on Windows:
+```sh
+popd
+dotnet build -target:genMAVSDKWin
+```
