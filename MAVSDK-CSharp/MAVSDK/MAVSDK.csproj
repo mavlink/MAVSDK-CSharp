@@ -22,6 +22,13 @@
     <Message Importance="high" Text="$(ProtoCCommand)" />
     <Exec Command="$(ProtoCCommand)" />
   </Target>
+  <Target Name="GenMAVSDKWin">
+    <PropertyGroup>
+        <ProtoCCommand>$(Protobuf_ProtocFullPath) --plugin=protoc-gen-custom=../../proto/pb_plugins/venv/Scripts/protoc-gen-dcsdk.exe --custom_opt=file_ext=cs,template_path=templates --custom_out=Plugins @(Protobuf->'-I%(RelativeDir)', ' ') @(Protobuf->'%(Filename)%(Extension)', ' ')</ProtoCCommand>
+    </PropertyGroup>
+    <Message Importance="high" Text="$(ProtoCCommand)" />
+    <Exec Command="$(ProtoCCommand)" />
+  </Target>
 
   <ItemGroup>
     <Protobuf Include="..\..\proto\protos\action\action.proto" Link="proto\action\action.proto" />
