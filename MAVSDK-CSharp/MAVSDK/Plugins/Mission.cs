@@ -55,7 +55,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<List<MissionItem>>(observer =>
             {
-                var downloadMissionResponse = _missionServiceClient.DownloadMission(new DownloadMissionRequest());
+                var request = new DownloadMissionRequest();
+                var downloadMissionResponse = _missionServiceClient.DownloadMission(request);
                 var missionResult = downloadMissionResponse.MissionResult;
                 if (missionResult.Result == MissionResult.Types.Result.Success)
                 {
@@ -143,7 +144,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<bool>(observer =>
             {
-                var isMissionFinishedResponse = _missionServiceClient.IsMissionFinished(new IsMissionFinishedRequest());
+                var request = new IsMissionFinishedRequest();
+                var isMissionFinishedResponse = _missionServiceClient.IsMissionFinished(request);
                 observer.OnNext(isMissionFinishedResponse.IsFinished);
 
                 observer.OnCompleted();
@@ -176,7 +178,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<bool>(observer =>
             {
-                var getReturnToLaunchAfterMissionResponse = _missionServiceClient.GetReturnToLaunchAfterMission(new GetReturnToLaunchAfterMissionRequest());
+                var request = new GetReturnToLaunchAfterMissionRequest();
+                var getReturnToLaunchAfterMissionResponse = _missionServiceClient.GetReturnToLaunchAfterMission(request);
                 observer.OnNext(getReturnToLaunchAfterMissionResponse.Enable);
 
                 observer.OnCompleted();

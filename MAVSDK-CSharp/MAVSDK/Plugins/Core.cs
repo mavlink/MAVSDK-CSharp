@@ -46,7 +46,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<List<PluginInfo>>(observer =>
             {
-                var listRunningPluginsResponse = _coreServiceClient.ListRunningPlugins(new ListRunningPluginsRequest());
+                var request = new ListRunningPluginsRequest();
+                var listRunningPluginsResponse = _coreServiceClient.ListRunningPlugins(request);
                 observer.OnNext(listRunningPluginsResponse.PluginInfo.ToList());
 
                 observer.OnCompleted();
