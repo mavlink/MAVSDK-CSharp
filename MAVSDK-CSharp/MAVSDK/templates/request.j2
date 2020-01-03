@@ -1,8 +1,20 @@
-public IObservable<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}> {{ name.upper_camel_case }}()
+public IObservable<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}> {{ name.upper_camel_case }}({% for param in params %}{{ param.type_info.name }} {{ param.name.lower_camel_case }}{{ ", " if not loop.last }}{% endfor %})
 {
     return Observable.Create<{% if return_type.is_repeated %}List<{{ return_type.inner_name }}>{% else %}{{ return_type.name }}{% endif %}>(observer =>
     {
-        var {{ name.lower_camel_case }}Response = _{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(new {{ name.upper_camel_case }}Request());
+        var request = new {{ name.upper_camel_case }}Request();
+          {%- for param in params %}
+            {%- if param.type_info.is_primitive %}
+          request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }};
+            {%- elif param.type_info.is_repeated %}
+          // TODO correct from Java code
+          request.{{ param.name.upper_camel_case }}.AddRange({{ param.name.lower_camel_case }}.stream().map(elem -> elem.rpc{{ param.type_info.inner_name }}())::iterator)
+            {%- else %}
+          // TODO correct from Java code
+          request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }}.rpc{{ param.type_info.name }}();
+            {%- endif %}
+          {%- endfor %}
+        var {{ name.lower_camel_case }}Response = _{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(request);
 
         {%- if has_result %}
         var {{ plugin_name.lower_camel_case }}Result = {{ name.lower_camel_case }}Response.{{ plugin_name.upper_camel_case }}Result;
