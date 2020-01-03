@@ -196,7 +196,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<float>(observer =>
             {
-                var getTakeoffAltitudeResponse = _actionServiceClient.GetTakeoffAltitude(new GetTakeoffAltitudeRequest());
+                var request = new GetTakeoffAltitudeRequest();
+                var getTakeoffAltitudeResponse = _actionServiceClient.GetTakeoffAltitude(request);
                 var actionResult = getTakeoffAltitudeResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -235,7 +236,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<float>(observer =>
             {
-                var getMaximumSpeedResponse = _actionServiceClient.GetMaximumSpeed(new GetMaximumSpeedRequest());
+                var request = new GetMaximumSpeedRequest();
+                var getMaximumSpeedResponse = _actionServiceClient.GetMaximumSpeed(request);
                 var actionResult = getMaximumSpeedResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -274,7 +276,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<float>(observer =>
             {
-                var getReturnToLaunchAltitudeResponse = _actionServiceClient.GetReturnToLaunchAltitude(new GetReturnToLaunchAltitudeRequest());
+                var request = new GetReturnToLaunchAltitudeRequest();
+                var getReturnToLaunchAltitudeResponse = _actionServiceClient.GetReturnToLaunchAltitude(request);
                 var actionResult = getReturnToLaunchAltitudeResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {

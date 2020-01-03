@@ -63,7 +63,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<bool>(observer =>
             {
-                var isActiveResponse = _offboardServiceClient.IsActive(new IsActiveRequest());
+                var request = new IsActiveRequest();
+                var isActiveResponse = _offboardServiceClient.IsActive(request);
                 observer.OnNext(isActiveResponse.IsActive);
 
                 observer.OnCompleted();

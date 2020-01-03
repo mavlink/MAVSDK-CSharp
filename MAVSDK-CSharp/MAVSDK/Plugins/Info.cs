@@ -25,7 +25,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Version>(observer =>
             {
-                var getVersionResponse = _infoServiceClient.GetVersion(new GetVersionRequest());
+                var request = new GetVersionRequest();
+                var getVersionResponse = _infoServiceClient.GetVersion(request);
                 var infoResult = getVersionResponse.InfoResult;
                 if (infoResult.Result == InfoResult.Types.Result.Success)
                 {

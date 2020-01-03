@@ -21,11 +21,13 @@ namespace MAVSDK.Plugins
             _paramServiceClient = new ParamService.ParamServiceClient(channel);
         }
 
-        public IObservable<int> GetIntParam()
+        public IObservable<int> GetIntParam(string name)
         {
             return Observable.Create<int>(observer =>
             {
-                var getIntParamResponse = _paramServiceClient.GetIntParam(new GetIntParamRequest());
+                var request = new GetIntParamRequest();
+                request.Name = name;
+                var getIntParamResponse = _paramServiceClient.GetIntParam(request);
                 var paramResult = getIntParamResponse.ParamResult;
                 if (paramResult.Result == ParamResult.Types.Result.Success)
                 {
@@ -60,11 +62,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<float> GetFloatParam()
+        public IObservable<float> GetFloatParam(string name)
         {
             return Observable.Create<float>(observer =>
             {
-                var getFloatParamResponse = _paramServiceClient.GetFloatParam(new GetFloatParamRequest());
+                var request = new GetFloatParamRequest();
+                request.Name = name;
+                var getFloatParamResponse = _paramServiceClient.GetFloatParam(request);
                 var paramResult = getFloatParamResponse.ParamResult;
                 if (paramResult.Result == ParamResult.Types.Result.Success)
                 {
