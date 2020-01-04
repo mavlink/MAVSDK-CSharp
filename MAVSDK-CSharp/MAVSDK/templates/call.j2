@@ -1,8 +1,19 @@
-public IObservable<Unit> {{ name.upper_camel_case }}()
+public IObservable<Unit> {{ name.upper_camel_case }}({% for param in params %}{{ param.type_info.name }} {{ param.name.lower_camel_case }}{{ ", " if not loop.last }}{% endfor %})
 {
     return Observable.Create<Unit>(observer =>
     {
-        {% if has_result %}var {{ name.lower_camel_case }}Response = {% endif %}_{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(new {{ name.upper_camel_case }}Request());
+        var request = new {{ name.upper_camel_case }}Request();
+        {% if has_result %}var {{ name.lower_camel_case }}Response = {% endif %}_{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(request);
+        
+        {%- for param in params %}
+          {%- if param.type_info.is_primitive %}
+        request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }};
+          {%- elif param.type_info.is_repeated %}
+        request.{{ param.name.upper_camel_case }}.AddRange({{ param.name.lower_camel_case }});
+          {%- else %}
+        request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }};
+          {%- endif %}
+        {%- endfor %}
 
         {%- if has_result %}
         var {{ plugin_name.lower_camel_case }}Result = {{ name.lower_camel_case }}Response.{{ plugin_name.upper_camel_case }}Result;
