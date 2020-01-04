@@ -7,11 +7,9 @@ public IObservable<{% if return_type.is_repeated %}List<{{ return_type.inner_nam
           {%- if param.type_info.is_primitive %}
         request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }};
           {%- elif param.type_info.is_repeated %}
-        // TODO correct from Java code
-        //request.{{ param.name.upper_camel_case }}.AddRange({{ param.name.lower_camel_case }}.stream().map(elem -> elem.rpc{{ param.type_info.inner_name }}())::iterator)
+        request.{{ param.name.upper_camel_case }}.AddRange({{ param.name.lower_camel_case }});
           {%- else %}
-        // TODO correct from Java code
-        //request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }}.rpc{{ param.type_info.name }}();
+        request.{{ param.name.upper_camel_case }} = {{ param.name.lower_camel_case }};
           {%- endif %}
         {%- endfor %}
         var {{ name.lower_camel_case }}Response = _{{ plugin_name.lower_camel_case }}ServiceClient.{{ name.upper_camel_case }}(request);
