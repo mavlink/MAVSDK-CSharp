@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Grpc.Core;
-using MAVSDK;
+using Mavsdk.Rpc.Mission;
 
 namespace MAVSDK.CSharp.ConsoleClient
 {
@@ -23,6 +23,8 @@ namespace MAVSDK.CSharp.ConsoleClient
              *     - discard the altitudes lower than 0
              */
             var drone = new MavsdkSystem(Host, Port);
+            var tcs = new TaskCompletionSource<bool>();
+
             drone.Telemetry.Position()
                 .Select(position => Math.Round(position.RelativeAltitudeM, 1))
                 .DistinctUntilChanged()
@@ -33,17 +35,58 @@ namespace MAVSDK.CSharp.ConsoleClient
             drone.Action.GetTakeoffAltitude()
                 .Do(altitude => Console.WriteLine($"Takeoff altitude: {altitude}"))
                 .Subscribe();
-            
-            // Arm, takeoff, wait 5 seconds and land.
-            var tcs = new TaskCompletionSource<bool>();
-            drone.Action.Arm()
-                .Concat(drone.Action.Takeoff())
-                .Delay(TimeSpan.FromSeconds(5))
-                .Concat(drone.Action.Land())
-                .Subscribe(Observer.Create<Unit>(_ => { }, onError: _ => tcs.SetResult(false), onCompleted: () => tcs.SetResult(true)));
 
-            // Wait until the takeoff routine completes (which happens when the landing starts)
+            // Print mission progress + end program when flown to completion
+            drone.Mission.MissionProgress()
+                .Subscribe(mp =>
+                {
+                    Console.WriteLine($"Mission progress - item #{mp.CurrentItemIndex+1}");
+                    if (mp.CurrentItemIndex == mp.MissionCount - 1 && mp.MissionCount > 0)
+                    {
+                        tcs.SetResult(true);
+                    }
+                });
+            
+            // Upload and fly a mission
+            var missionPoints = await GetSampleMissionPoints(drone);
+            drone.Mission.UploadMission(missionPoints)
+                .Concat(drone.Mission.SetReturnToLaunchAfterMission(true))
+                .Concat(drone.Action.Arm())
+                .Concat(drone.Mission.StartMission())
+                .Subscribe(_ => { });
+
+            //wait until the mission finishes (from MissionProgress subscription)
             await tcs.Task;
+        }
+
+        private static async Task<List<MissionItem>> GetSampleMissionPoints(MavsdkSystem drone)
+        {
+            var dronePosition = await drone.Telemetry.Position().FirstAsync();
+            var missionPoints = new List<MissionItem>();
+            var missionItem = new MissionItem();
+            missionItem.IsFlyThrough = true;
+            missionItem.SpeedMS = 2;
+            missionItem.RelativeAltitudeM = 5;
+            missionItem.LatitudeDeg = dronePosition.LatitudeDeg;
+            missionItem.LongitudeDeg = dronePosition.LongitudeDeg;
+
+            for (int i = 0; i < 3; i++)
+            {
+                missionItem = missionItem.Clone();
+                if (i % 2 == 0)
+                {
+                    missionItem.LatitudeDeg += 0.0001;
+                }
+                else
+                {
+                    missionItem.LatitudeDeg -= 0.0001;
+                }
+
+                missionItem.LongitudeDeg += 0.0001;
+                missionPoints.Add(missionItem);
+            }
+
+            return missionPoints;
         }
     }
 }
