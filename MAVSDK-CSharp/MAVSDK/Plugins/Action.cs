@@ -25,7 +25,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var armResponse = _actionServiceClient.Arm(new ArmRequest());
+                var request = new ArmRequest();
+                var armResponse = _actionServiceClient.Arm(request);
                 var actionResult = armResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -44,7 +45,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var disarmResponse = _actionServiceClient.Disarm(new DisarmRequest());
+                var request = new DisarmRequest();
+                var disarmResponse = _actionServiceClient.Disarm(request);
                 var actionResult = disarmResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -63,7 +65,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var takeoffResponse = _actionServiceClient.Takeoff(new TakeoffRequest());
+                var request = new TakeoffRequest();
+                var takeoffResponse = _actionServiceClient.Takeoff(request);
                 var actionResult = takeoffResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -82,7 +85,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var landResponse = _actionServiceClient.Land(new LandRequest());
+                var request = new LandRequest();
+                var landResponse = _actionServiceClient.Land(request);
                 var actionResult = landResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -101,7 +105,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var rebootResponse = _actionServiceClient.Reboot(new RebootRequest());
+                var request = new RebootRequest();
+                var rebootResponse = _actionServiceClient.Reboot(request);
                 var actionResult = rebootResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -120,7 +125,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var killResponse = _actionServiceClient.Kill(new KillRequest());
+                var request = new KillRequest();
+                var killResponse = _actionServiceClient.Kill(request);
                 var actionResult = killResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -139,7 +145,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var returnToLaunchResponse = _actionServiceClient.ReturnToLaunch(new ReturnToLaunchRequest());
+                var request = new ReturnToLaunchRequest();
+                var returnToLaunchResponse = _actionServiceClient.ReturnToLaunch(request);
                 var actionResult = returnToLaunchResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -158,7 +165,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var transitionToFixedWingResponse = _actionServiceClient.TransitionToFixedWing(new TransitionToFixedWingRequest());
+                var request = new TransitionToFixedWingRequest();
+                var transitionToFixedWingResponse = _actionServiceClient.TransitionToFixedWing(request);
                 var actionResult = transitionToFixedWingResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -177,7 +185,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var transitionToMulticopterResponse = _actionServiceClient.TransitionToMulticopter(new TransitionToMulticopterRequest());
+                var request = new TransitionToMulticopterRequest();
+                var transitionToMulticopterResponse = _actionServiceClient.TransitionToMulticopter(request);
                 var actionResult = transitionToMulticopterResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -213,11 +222,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetTakeoffAltitude()
+        public IObservable<Unit> SetTakeoffAltitude(float altitude)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setTakeoffAltitudeResponse = _actionServiceClient.SetTakeoffAltitude(new SetTakeoffAltitudeRequest());
+                var request = new SetTakeoffAltitudeRequest();
+                request.Altitude = altitude;
+                var setTakeoffAltitudeResponse = _actionServiceClient.SetTakeoffAltitude(request);
                 var actionResult = setTakeoffAltitudeResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -253,11 +264,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetMaximumSpeed()
+        public IObservable<Unit> SetMaximumSpeed(float speed)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setMaximumSpeedResponse = _actionServiceClient.SetMaximumSpeed(new SetMaximumSpeedRequest());
+                var request = new SetMaximumSpeedRequest();
+                request.Speed = speed;
+                var setMaximumSpeedResponse = _actionServiceClient.SetMaximumSpeed(request);
                 var actionResult = setMaximumSpeedResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {
@@ -293,11 +306,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetReturnToLaunchAltitude()
+        public IObservable<Unit> SetReturnToLaunchAltitude(float relativeAltitudeM)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setReturnToLaunchAltitudeResponse = _actionServiceClient.SetReturnToLaunchAltitude(new SetReturnToLaunchAltitudeRequest());
+                var request = new SetReturnToLaunchAltitudeRequest();
+                request.RelativeAltitudeM = relativeAltitudeM;
+                var setReturnToLaunchAltitudeResponse = _actionServiceClient.SetReturnToLaunchAltitude(request);
                 var actionResult = setReturnToLaunchAltitudeResponse.ActionResult;
                 if (actionResult.Result == ActionResult.Types.Result.Success)
                 {

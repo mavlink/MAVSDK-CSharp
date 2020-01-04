@@ -21,11 +21,14 @@ namespace MAVSDK.Plugins
             _gimbalServiceClient = new GimbalService.GimbalServiceClient(channel);
         }
 
-        public IObservable<Unit> SetPitchAndYaw()
+        public IObservable<Unit> SetPitchAndYaw(float pitchDeg, float yawDeg)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setPitchAndYawResponse = _gimbalServiceClient.SetPitchAndYaw(new SetPitchAndYawRequest());
+                var request = new SetPitchAndYawRequest();
+                request.PitchDeg = pitchDeg;
+                request.YawDeg = yawDeg;
+                var setPitchAndYawResponse = _gimbalServiceClient.SetPitchAndYaw(request);
                 var gimbalResult = setPitchAndYawResponse.GimbalResult;
                 if (gimbalResult.Result == GimbalResult.Types.Result.Success)
                 {

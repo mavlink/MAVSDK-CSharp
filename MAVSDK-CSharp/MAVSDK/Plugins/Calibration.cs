@@ -153,7 +153,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                _calibrationServiceClient.Cancel(new CancelRequest());
+                var request = new CancelRequest();
+                _calibrationServiceClient.Cancel(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
