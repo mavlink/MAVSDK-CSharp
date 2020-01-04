@@ -25,7 +25,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var takePhotoResponse = _cameraServiceClient.TakePhoto(new TakePhotoRequest());
+                var request = new TakePhotoRequest();
+                var takePhotoResponse = _cameraServiceClient.TakePhoto(request);
                 var cameraResult = takePhotoResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -40,11 +41,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> StartPhotoInterval()
+        public IObservable<Unit> StartPhotoInterval(float intervalS)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var startPhotoIntervalResponse = _cameraServiceClient.StartPhotoInterval(new StartPhotoIntervalRequest());
+                var request = new StartPhotoIntervalRequest();
+                request.IntervalS = intervalS;
+                var startPhotoIntervalResponse = _cameraServiceClient.StartPhotoInterval(request);
                 var cameraResult = startPhotoIntervalResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -63,7 +66,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var stopPhotoIntervalResponse = _cameraServiceClient.StopPhotoInterval(new StopPhotoIntervalRequest());
+                var request = new StopPhotoIntervalRequest();
+                var stopPhotoIntervalResponse = _cameraServiceClient.StopPhotoInterval(request);
                 var cameraResult = stopPhotoIntervalResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -82,7 +86,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var startVideoResponse = _cameraServiceClient.StartVideo(new StartVideoRequest());
+                var request = new StartVideoRequest();
+                var startVideoResponse = _cameraServiceClient.StartVideo(request);
                 var cameraResult = startVideoResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -101,7 +106,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var stopVideoResponse = _cameraServiceClient.StopVideo(new StopVideoRequest());
+                var request = new StopVideoRequest();
+                var stopVideoResponse = _cameraServiceClient.StopVideo(request);
                 var cameraResult = stopVideoResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -120,7 +126,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var startVideoStreamingResponse = _cameraServiceClient.StartVideoStreaming(new StartVideoStreamingRequest());
+                var request = new StartVideoStreamingRequest();
+                var startVideoStreamingResponse = _cameraServiceClient.StartVideoStreaming(request);
                 var cameraResult = startVideoStreamingResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -139,7 +146,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var stopVideoStreamingResponse = _cameraServiceClient.StopVideoStreaming(new StopVideoStreamingRequest());
+                var request = new StopVideoStreamingRequest();
+                var stopVideoStreamingResponse = _cameraServiceClient.StopVideoStreaming(request);
                 var cameraResult = stopVideoStreamingResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -154,11 +162,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetMode()
+        public IObservable<Unit> SetMode(CameraMode cameraMode)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setModeResponse = _cameraServiceClient.SetMode(new SetModeRequest());
+                var request = new SetModeRequest();
+                request.CameraMode = cameraMode;
+                var setModeResponse = _cameraServiceClient.SetMode(request);
                 var cameraResult = setModeResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {
@@ -299,11 +309,13 @@ namespace MAVSDK.Plugins
                     }));
         }
 
-        public IObservable<Unit> SetSetting()
+        public IObservable<Unit> SetSetting(Setting setting)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setSettingResponse = _cameraServiceClient.SetSetting(new SetSettingRequest());
+                var request = new SetSettingRequest();
+                request.Setting = setting;
+                var setSettingResponse = _cameraServiceClient.SetSetting(request);
                 var cameraResult = setSettingResponse.CameraResult;
                 if (cameraResult.Result == CameraResult.Types.Result.Success)
                 {

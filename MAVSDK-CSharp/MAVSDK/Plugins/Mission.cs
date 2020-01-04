@@ -21,11 +21,13 @@ namespace MAVSDK.Plugins
             _missionServiceClient = new MissionService.MissionServiceClient(channel);
         }
 
-        public IObservable<Unit> UploadMission()
+        public IObservable<Unit> UploadMission(List<MissionItem> missionItems)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var uploadMissionResponse = _missionServiceClient.UploadMission(new UploadMissionRequest());
+                var request = new UploadMissionRequest();
+                request.MissionItems.AddRange(missionItems);
+                var uploadMissionResponse = _missionServiceClient.UploadMission(request);
                 var missionResult = uploadMissionResponse.MissionResult;
                 if (missionResult.Result == MissionResult.Types.Result.Success)
                 {
@@ -44,7 +46,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                _missionServiceClient.CancelMissionUpload(new CancelMissionUploadRequest());
+                var request = new CancelMissionUploadRequest();
+                _missionServiceClient.CancelMissionUpload(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
@@ -76,7 +79,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                _missionServiceClient.CancelMissionDownload(new CancelMissionDownloadRequest());
+                var request = new CancelMissionDownloadRequest();
+                _missionServiceClient.CancelMissionDownload(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
@@ -87,7 +91,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var startMissionResponse = _missionServiceClient.StartMission(new StartMissionRequest());
+                var request = new StartMissionRequest();
+                var startMissionResponse = _missionServiceClient.StartMission(request);
                 var missionResult = startMissionResponse.MissionResult;
                 if (missionResult.Result == MissionResult.Types.Result.Success)
                 {
@@ -106,7 +111,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var pauseMissionResponse = _missionServiceClient.PauseMission(new PauseMissionRequest());
+                var request = new PauseMissionRequest();
+                var pauseMissionResponse = _missionServiceClient.PauseMission(request);
                 var missionResult = pauseMissionResponse.MissionResult;
                 if (missionResult.Result == MissionResult.Types.Result.Success)
                 {
@@ -121,11 +127,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetCurrentMissionItemIndex()
+        public IObservable<Unit> SetCurrentMissionItemIndex(int index)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setCurrentMissionItemIndexResponse = _missionServiceClient.SetCurrentMissionItemIndex(new SetCurrentMissionItemIndexRequest());
+                var request = new SetCurrentMissionItemIndexRequest();
+                request.Index = index;
+                var setCurrentMissionItemIndexResponse = _missionServiceClient.SetCurrentMissionItemIndex(request);
                 var missionResult = setCurrentMissionItemIndexResponse.MissionResult;
                 if (missionResult.Result == MissionResult.Types.Result.Success)
                 {
@@ -187,11 +195,13 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetReturnToLaunchAfterMission()
+        public IObservable<Unit> SetReturnToLaunchAfterMission(bool enable)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _missionServiceClient.SetReturnToLaunchAfterMission(new SetReturnToLaunchAfterMissionRequest());
+                var request = new SetReturnToLaunchAfterMissionRequest();
+                request.Enable = enable;
+                _missionServiceClient.SetReturnToLaunchAfterMission(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);

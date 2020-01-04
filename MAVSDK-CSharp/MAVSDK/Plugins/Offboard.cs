@@ -25,7 +25,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var startResponse = _offboardServiceClient.Start(new StartRequest());
+                var request = new StartRequest();
+                var startResponse = _offboardServiceClient.Start(request);
                 var offboardResult = startResponse.OffboardResult;
                 if (offboardResult.Result == OffboardResult.Types.Result.Success)
                 {
@@ -44,7 +45,8 @@ namespace MAVSDK.Plugins
         {
             return Observable.Create<Unit>(observer =>
             {
-                var stopResponse = _offboardServiceClient.Stop(new StopRequest());
+                var request = new StopRequest();
+                var stopResponse = _offboardServiceClient.Stop(request);
                 var offboardResult = stopResponse.OffboardResult;
                 if (offboardResult.Result == OffboardResult.Types.Result.Success)
                 {
@@ -72,66 +74,78 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetAttitude()
+        public IObservable<Unit> SetAttitude(Attitude attitude)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _offboardServiceClient.SetAttitude(new SetAttitudeRequest());
+                var request = new SetAttitudeRequest();
+                request.Attitude = attitude;
+                _offboardServiceClient.SetAttitude(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
             });
         }
 
-        public IObservable<Unit> SetActuatorControl()
+        public IObservable<Unit> SetActuatorControl(ActuatorControl actuatorControl)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _offboardServiceClient.SetActuatorControl(new SetActuatorControlRequest());
+                var request = new SetActuatorControlRequest();
+                request.ActuatorControl = actuatorControl;
+                _offboardServiceClient.SetActuatorControl(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
             });
         }
 
-        public IObservable<Unit> SetAttitudeRate()
+        public IObservable<Unit> SetAttitudeRate(AttitudeRate attitudeRate)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _offboardServiceClient.SetAttitudeRate(new SetAttitudeRateRequest());
+                var request = new SetAttitudeRateRequest();
+                request.AttitudeRate = attitudeRate;
+                _offboardServiceClient.SetAttitudeRate(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
             });
         }
 
-        public IObservable<Unit> SetPositionNed()
+        public IObservable<Unit> SetPositionNed(PositionNEDYaw positionNedYaw)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _offboardServiceClient.SetPositionNed(new SetPositionNedRequest());
+                var request = new SetPositionNedRequest();
+                request.PositionNedYaw = positionNedYaw;
+                _offboardServiceClient.SetPositionNed(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
             });
         }
 
-        public IObservable<Unit> SetVelocityBody()
+        public IObservable<Unit> SetVelocityBody(VelocityBodyYawspeed velocityBodyYawspeed)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _offboardServiceClient.SetVelocityBody(new SetVelocityBodyRequest());
+                var request = new SetVelocityBodyRequest();
+                request.VelocityBodyYawspeed = velocityBodyYawspeed;
+                _offboardServiceClient.SetVelocityBody(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);
             });
         }
 
-        public IObservable<Unit> SetVelocityNed()
+        public IObservable<Unit> SetVelocityNed(VelocityNEDYaw velocityNedYaw)
         {
             return Observable.Create<Unit>(observer =>
             {
-                _offboardServiceClient.SetVelocityNed(new SetVelocityNedRequest());
+                var request = new SetVelocityNedRequest();
+                request.VelocityNedYaw = velocityNedYaw;
+                _offboardServiceClient.SetVelocityNed(request);
                 observer.OnCompleted();
 
                 return Task.FromResult(Disposable.Empty);

@@ -43,11 +43,14 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetIntParam()
+        public IObservable<Unit> SetIntParam(string name, int value)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setIntParamResponse = _paramServiceClient.SetIntParam(new SetIntParamRequest());
+                var request = new SetIntParamRequest();
+                request.Name = name;
+                request.Value = value;
+                var setIntParamResponse = _paramServiceClient.SetIntParam(request);
                 var paramResult = setIntParamResponse.ParamResult;
                 if (paramResult.Result == ParamResult.Types.Result.Success)
                 {
@@ -84,11 +87,14 @@ namespace MAVSDK.Plugins
             });
         }
 
-        public IObservable<Unit> SetFloatParam()
+        public IObservable<Unit> SetFloatParam(string name, float value)
         {
             return Observable.Create<Unit>(observer =>
             {
-                var setFloatParamResponse = _paramServiceClient.SetFloatParam(new SetFloatParamRequest());
+                var request = new SetFloatParamRequest();
+                request.Name = name;
+                request.Value = value;
+                var setFloatParamResponse = _paramServiceClient.SetFloatParam(request);
                 var paramResult = setFloatParamResponse.ParamResult;
                 if (paramResult.Result == ParamResult.Types.Result.Success)
                 {
